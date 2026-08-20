@@ -6,6 +6,11 @@ from gtts import gTTS
 dvd_img = pygame.image.load("dvd_disk.png")
 dvd_img = pygame.transform.scale(dvd_img, (20, 30))
 
+
+# to get ur own API key, enter this site: https://aistudio.google.com/api-keys and create your own.
+# then create an enviroment variable with this command - "setx GEMINI_API_KEY "YOUR API KEY"
+# restart pycharm and run the program.
+
 client = genai.Client()
 model_ai = "gemini-3.6-flash"
 
