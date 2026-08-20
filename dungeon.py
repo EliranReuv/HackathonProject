@@ -152,7 +152,7 @@ class Dungeon:
 
     def load_enemys(self,maze) -> None:
         test_question = "What is your name?"
-        test_answers = ["ofri","itamar", "talya", "eliran"]
+        test_answers = ["ofri","ohav", "talya", "eliran"]
         for row in range( len(maze)):
             for col in range(len(maze[0])):
                 
@@ -161,7 +161,8 @@ class Dungeon:
                     new_background_enemy_image = self.backImageLoad
                     new_enemy_image = pygame.image.load(rnd.choice(ENEMYS_IMAGES)).convert_alpha()
                     new_enemy = Enemy( new_background_enemy_image,new_enemy_image, self.blockWidth * col, self.blockHeight * row, (self.blockWidth,self.blockHeight), self.screen, self.clock,test_question , test_answers, test_answers[0] )
-                    self.enemysMatrix[row][col] = new_enemy 
+                    self.enemysMatrix[row][col] = new_enemy
+
 
     def counter_enemy(self,maze,pos: tuple[int]) -> bool:
 
@@ -242,8 +243,6 @@ class Dungeon:
                 pygame.event.clear()
                 while pygame.mouse.get_pressed()[0]:
                     pygame.event.pump()
-                    self.clock.tick(60)
-                self.show_lost_screen()
                 return
 
             if self.check_pass_level(maze,playerCords):

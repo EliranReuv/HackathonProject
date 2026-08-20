@@ -7,7 +7,6 @@ clock = pygame.time.Clock()
 
 import button
 from consts import *
-from menu_main import *
 from dungeon import Dungeon
 from dungeon_enum import Subject
 

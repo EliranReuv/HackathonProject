@@ -1,5 +1,5 @@
 import sqlite3 
-
+from google import genai
 
 """
 Question:
@@ -36,4 +36,6 @@ class DataBase:
 
         self.disconnect()
 
-        
+    # def questions(self):
+    #     self.connect()
+    #     client =genai.Client()
