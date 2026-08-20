@@ -1,4 +1,4 @@
-BACKGROUND_STORY = "images/background.jpg"
+BACKGROUND_STORY = "images/dungeons/background.jpg"
 FONT = "images/fontt.otf"
 CONTINUE_BUTTON = "images/continue_button.png"
 

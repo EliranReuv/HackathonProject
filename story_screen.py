@@ -18,7 +18,7 @@ button_pos = (width - 150, height - 80)
 button_rect.topleft = button_pos
 
 # creating button object
-continue_button = button.Button(button_pos[0],button_pos[1], button_img, 2)
+continue_button = button.Button(button_pos[0], button_pos[1], button_img, 2)
 
 
 def create_welcome_screen():
