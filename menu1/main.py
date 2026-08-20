@@ -1,19 +1,16 @@
 import pygame
-
-pygame.init()
-screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-pygame.display.set_caption("Menu")
-clock = pygame.time.Clock()
-
 import button
 from screen_elements import *
 from consts import *
 from menu_main import *
 from dungeon import Dungeon
 from dungeon_enum import Subject
+import story_screen
 
-
-#game variables
+pygame.init()
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+pygame.display.set_caption("Menu")
+clock = pygame.time.Clock()
 
 game_quit = False
 
@@ -27,21 +24,17 @@ block_size = [x // 100 for x in screen_size]
 #load background image
 background_image_load = pygame.image.load("images/dungeons/background.jpg").convert_alpha()
 background_image = pygame.transform.scale(background_image_load, (screen_size[0], screen_size[1]))
+
 #load button images
 english_dungeon_background = pygame.image.load(ENGLISH_BACKGROUND).convert_alpha()
 history_dungeon_background = pygame.image.load(HISTORY_BACKGROUND).convert_alpha()
 math_dungeon_background = pygame.image.load(MATH_BACKGROUND).convert_alpha()
 science_dungeon_background = pygame.image.load(SCIENCE_BACKGROUND).convert_alpha()
 
-
 #load block image
-
 block_image_load = pygame.image.load(BLOCK_IMAGE).convert_alpha()
 start_block_image_load = pygame.image.load(START_BLOCK_IMAGE).convert_alpha()
 end_block_image_load = pygame.image.load(END_BLOCK_IMAGE).convert_alpha()
-
-
-
 
 #load button images
 english_dungeon = pygame.image.load("images/dungeons/english_dungeon.png").convert_alpha()
@@ -59,30 +52,26 @@ science_dungeon_button = button.Button(block_size[0] * 55, block_size[1] * 60, s
 
 
 
-def  choose_dugneon_screen() -> None:
+def choose_dugneon_screen() -> None:
     english_dungeon_button.draw(screen)
     history_dungeon_button.draw(screen)
     math_dungeon_button.draw(screen)
     science_dungeon_button.draw(screen)
 
-
-
-
-
-
 def main() -> None:
-
     status = 0
-
-
     run = True
+
+    story_screen.create_welcome_screen()
+
     while run:
-        screen.blit(background_image, (0,0))
-
-        
+        screen.blit(background_image, (0, 0))
         choose_dugneon_screen()
-
         for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    run = False
+                    pygame.quit()
             if event.type == pygame.QUIT:
                 run = False
 
@@ -92,7 +81,6 @@ def main() -> None:
 
                 dungeon.start()
 
-                
             if history_dungeon_button.check_click():
 
                 screen.blit(background_image, (0,0))

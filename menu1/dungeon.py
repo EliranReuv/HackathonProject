@@ -2,6 +2,8 @@ import pygame
 from player import Player
 from enemy import Enemy
 from consts import *
+from DVD_player import *
+
 import random as rnd
 import time
 
@@ -18,13 +20,13 @@ class Dungeon:
     #3 מסמל את היציאה
     #4 מסמל את האויבים
     # 5 מסמל את הבוס
-
+    # 6 מסמל את הדיסק
     # LEVEL 1 - EASY
     __maze1 = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0],
     [2,1,0,1,1,1,1,1,1,4,1,1,1,1,0,1,1,1,0,0],
     [0,1,0,1,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0],
-    [0,4,0,1,0,1,1,4,1,1,1,1,0,1,1,1,1,4,0,0],
+    [0,4,0,6,0,1,1,4,1,1,1,1,0,1,1,1,1,4,0,0],
     [0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0],
     [0,1,1,4,1,1,0,1,0,1,1,1,0,1,1,1,0,1,0,0],
     [0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,1,0,1,0,0],
@@ -127,6 +129,10 @@ class Dungeon:
         self.endBlockImage = pygame.transform.scale(endBlockImage, (self.blockWidth,self.blockHeight))
         self.startBlockImage = pygame.transform.scale(startBlockImage, (self.blockWidth,self.blockHeight))
 
+        dvd_image = pygame.image.load(DVD_IMG).convert_alpha()
+        self.dvd = DvdPlayer(dvd_image, (self.blockWidth, self.blockHeight), self.screen, Type)
+        self.dvd.get_summery(Type)
+
         playerImage = pygame.image.load(PLAYER_IMAGE).convert_alpha()
         self.player = Player(playerImage, (self.blockWidth,self.blockHeight) ,self.blockWidth,self.blockHeight,self.screen)
 
@@ -155,11 +161,15 @@ class Dungeon:
                 elif maze[row][col] == 4 and self.enemysMatrix[row][col] != None:
                     enemy: Enemy = self.enemysMatrix[row][col]
                     enemy.show()
+
+                # start door and end door images
                 elif maze[row][col] == 3:
                     self.screen.blit(self.endBlockImage, (self.blockWidth * col, self.blockHeight * row))
                 elif maze[row][col] == 2:
                     self.screen.blit(self.startBlockImage, (self.blockWidth * col, self.blockHeight * row))
-
+                # dvd icons
+                elif maze[row][col] == 6:
+                    self.dvd.load_image((self.blockWidth * col, self.blockHeight * row))
 
     
     #הפוקנציה לא מחזירה ערך
@@ -183,7 +193,11 @@ class Dungeon:
                     new_boss = Enemy(new_background_enemy_image, new_enemy_image, new_boss_image, self.blockWidth * col, self.blockHeight * row, (self.blockWidth, self.blockHeight), self.screen, self.clock, test_question , test_answers, test_answers[0] )
                     self.enemysMatrix[row][col] = new_boss
 
-
+    def counter_dvd(self, maze, pos) -> bool:
+        if maze[pos[1]][pos[0]] == 6:
+            self.dvd.start_mp3()
+            return True
+        return False
 
     #החץ מראה איזה סוג הפונקציה - הפונקציה תחזיר ערך בוליאני
     def counter_enemy(self,maze,pos: tuple[int]) -> bool:
@@ -212,13 +226,8 @@ class Dungeon:
 
         return False
 
-
     def start(self):
-
-
-
         maze: list[list[int]]
-
         match self.currentLevel:
             case 1:
                 maze = self.__maze1
@@ -231,11 +240,8 @@ class Dungeon:
             case _:
                 self.show_won_screen()
                 return
-
         self.player.down()
-
         playerCords = self.player.getIndexCords() # (ix , iy)
-        
         self.load_enemys(maze)
         run = True
         while run:
@@ -249,7 +255,9 @@ class Dungeon:
             if keys[pygame.K_ESCAPE]:
                 pygame.event.clear()
                 return
-
+            if self.counter_dvd(maze, playerCords):
+                pygame.event.clear()
+                return
             if not moved and (keys[pygame.K_s] or keys[pygame.K_DOWN]) and self.player.betweenY(0, self.mazeSize[1] - 1) and maze[playerCords[1] + 1][playerCords[0]] != 0 :
                 self.player.down()
                 playerCords = self.player.getIndexCords()
@@ -302,36 +310,3 @@ class Dungeon:
         self.screen.blit(self.wonImage, (0,0))
         pygame.display.flip()
         time.sleep(2)
-
-        
-
-    
-    
-
-
-
-
-    
-
-
-        
-                    
-
-
-
-
-    
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
