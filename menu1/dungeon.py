@@ -4,6 +4,7 @@ from enemy import Enemy
 from consts import *
 import random as rnd
 import time
+import consts
 
 class Dungeon: 
 
@@ -276,6 +277,7 @@ class Dungeon:
                     pygame.event.pump()
                     self.clock.tick(60)
                 self.show_lost_screen()
+                #עוצרת מיידית את הפונקציה ומחזירה None
                 return
 
             if self.check_pass_level(maze,playerCords):
@@ -291,13 +293,13 @@ class Dungeon:
             self.clock.tick(8)
 
 
-    #לא מחזיר ערך
+    #לא מחזיר ערך, מציג את מסך ההפסד
     def  show_lost_screen(self) -> None:
         self.screen.blit(self.lostImage, (0,0))
         pygame.display.flip()
         time.sleep(2)
 
-    # לא מחזיר ערך
+    # לא מחזיר ערךת מציג את מסך הניצחון
     def  show_won_screen(self) -> None:
         self.screen.blit(self.wonImage, (0,0))
         pygame.display.flip()

@@ -26,7 +26,6 @@ class Enemy:
             self.__x = x
             self.__y = y
 
-
             self.__enemySize = enemySizes
             self.bossImage = pygame.transform.scale(bossImage, self.__enemySize)
 

@@ -14,3 +14,5 @@ ENEMY_IMAGE = "images/enemys/monster1.png"
 BOSS_IMAGE = "images/enemys/monster2.png"
 ENEMY_BACKGROUND = "images/enemys/EnemyBackground.png"
 ANSWER_BACKGROUND = "images/enemys/AnswerBackground.png"
+
+
