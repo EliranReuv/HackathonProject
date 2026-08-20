@@ -2,6 +2,7 @@ import pygame
 from answer import Answer
 from textBlock import TextBlock
 from consts import *
+
 class Enemy: 
     __x: int = 0 #raw x placment
     __y: int = 0 #raw y placment
@@ -16,7 +17,7 @@ class Enemy:
 
     windowBackground: object
 
-    def __init__(self,backgroundImage,enemyImage,x,y,enemySizes: tuple[int],screen,clock, question: str,answers: list[str], rightAnswer) -> None:
+    def __init__(self,backgroundImage,enemyImage, bossImage ,x,y,enemySizes: tuple[int],screen,clock, question: str,answers: list[str], rightAnswer) -> None:
             self.__answers = []
             self.__enemySizes = enemySizes
             self.enemyImage = pygame.transform.scale(enemyImage, self.__enemySizes)
@@ -25,7 +26,9 @@ class Enemy:
             self.__x = x
             self.__y = y
 
+
             self.__enemySize = enemySizes
+            self.bossImage = pygame.transform.scale(bossImage, self.__enemySize)
 
             self.screen = screen
             self.clock = clock
@@ -37,6 +40,9 @@ class Enemy:
 
     def show(self) -> None:
         self.screen.blit(self.enemyImage, (self.__x, self.__y))
+
+    def show_boss(self) -> None:
+        self.screen.blit(self.bossImage, (self.__x, self.__y))
 
 
     def load_answers(self, answers, right_answer) -> None:

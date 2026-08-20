@@ -11,6 +11,14 @@ class Dungeon:
     enemysMatrix: list[list[object]] 
 
     mazeSize = (20,20)
+
+    #0 מסמל את הבלוקים
+    #1 מסמל את הדרך הפנוי
+    #2 מסמל את השחקן
+    #3 מסמל את היציאה
+    #4 מסמל את האויבים
+    # 5 מסמל את הבוס
+
     # LEVEL 1 - EASY
     __maze1 = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0],
@@ -102,7 +110,7 @@ class Dungeon:
     [0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,1,0,0],
     [0,1,0,1,0,4,0,1,0,1,1,4,0,1,0,1,1,1,0,0],
     [0,1,0,1,0,1,0,1,0,0,0,1,0,1,0,0,0,0,0,0],
-    [0,1,1,4,1,1,0,1,1,1,4,1,1,1,1,4,1,1,1,3],
+    [0,1,1,4,1,1,0,1,1,1,4,1,1,1,1,5,1,1,1,3],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 ]
@@ -132,13 +140,18 @@ class Dungeon:
         self.lostImage = pygame.transform.scale(self.lostImage, (self.screenSizes))
         self.wonImage = pygame.image.load(WON_IMAGE).convert_alpha()
         self.wonImage = pygame.transform.scale(self.wonImage, (self.screenSizes))
- 
+
+
     def show_maze(self, maze: list[list[int]]) -> None:
         
         for row in range( len(maze)):
             for col in range(len(maze[0])):
                 if maze[row][col] == 0:
                     self.screen.blit(self.blockImage, (self.blockWidth * col, self.blockHeight * row))
+                elif maze[row][col] == 5 and self.enemysMatrix[row][col] != None:
+                    #אויב מסוג אויב
+                    enemy : Enemy = self.enemysMatrix[row][col]
+                    enemy.show_boss()
                 elif maze[row][col] == 4 and self.enemysMatrix[row][col] != None:
                     enemy: Enemy = self.enemysMatrix[row][col]
                     enemy.show()
@@ -149,7 +162,7 @@ class Dungeon:
 
 
     
-
+    #הפוקנציה לא מחזירה ערך
     def load_enemys(self,maze) -> None:
         test_question = "What is your name?"
         test_answers = ["ofri","itamar", "talya", "eliran"]
@@ -159,14 +172,33 @@ class Dungeon:
                 if maze[row][col] == 4:
                     # new_background_enemy_image = pygame.image.load(ENEMY_BACKGROUND).convert_alpha()
                     new_background_enemy_image = self.backImageLoad
-                    new_enemy_image = pygame.image.load(rnd.choice(ENEMYS_IMAGES)).convert_alpha()
-                    new_enemy = Enemy( new_background_enemy_image,new_enemy_image, self.blockWidth * col, self.blockHeight * row, (self.blockWidth,self.blockHeight), self.screen, self.clock,test_question , test_answers, test_answers[0] )
-                    self.enemysMatrix[row][col] = new_enemy 
+                    new_enemy_image = pygame.image.load(ENEMY_IMAGE).convert_alpha()
+                    new_boss_image = pygame.image.load(BOSS_IMAGE).convert_alpha()
+                    new_enemy = Enemy( new_background_enemy_image,new_enemy_image, new_boss_image, self.blockWidth * col, self.blockHeight * row, (self.blockWidth,self.blockHeight), self.screen, self.clock,test_question , test_answers, test_answers[0] )
+                    self.enemysMatrix[row][col] = new_enemy
+                elif maze[row][col] == 5:
+                    new_background_enemy_image = self.backImageLoad
+                    new_enemy_image = pygame.image.load(ENEMY_IMAGE).convert_alpha()
+                    new_boss_image = pygame.image.load(BOSS_IMAGE).convert_alpha()
+                    new_boss = Enemy(new_background_enemy_image, new_enemy_image, new_boss_image, self.blockWidth * col, self.blockHeight * row, (self.blockWidth, self.blockHeight), self.screen, self.clock, test_question , test_answers, test_answers[0] )
+                    self.enemysMatrix[row][col] = new_boss
 
+
+
+    #החץ מראה איזה סוג הפונקציה - הפונקציה תחזיר ערך בוליאני
     def counter_enemy(self,maze,pos: tuple[int]) -> bool:
-
+        #אם המיקום של השחקן שווה למיקום שבו נמצא האויב והמקום לא ריק
+        #אז מציג את השאלון על המסך
         if  maze[pos[1]][pos[0]] == 4 and self.enemysMatrix[pos[1]][pos[0]] != None:
             enemy: Enemy =  self.enemysMatrix[pos[1]][pos[0]]
+            status = enemy.ShowDialogQuestion()
+            if status == True:
+                self.enemysMatrix[pos[1]][pos[0]] = None
+            return status
+
+        #אותו דבר רק עם הבוס
+        elif maze[pos[1]][pos[0]] == 5 and self.enemysMatrix[pos[1]][pos[0]] != None:
+            enemy : Enemy = self.enemysMatrix[pos[1]][pos[0]]
             status = enemy.ShowDialogQuestion()
             if status == True:
                 self.enemysMatrix[pos[1]][pos[0]] = None
@@ -259,12 +291,13 @@ class Dungeon:
             self.clock.tick(8)
 
 
-
+    #לא מחזיר ערך
     def  show_lost_screen(self) -> None:
         self.screen.blit(self.lostImage, (0,0))
         pygame.display.flip()
         time.sleep(2)
 
+    # לא מחזיר ערך
     def  show_won_screen(self) -> None:
         self.screen.blit(self.wonImage, (0,0))
         pygame.display.flip()

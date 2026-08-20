@@ -1,4 +1,3 @@
-
 SCIENCE_BACKGROUND = "images/dungeons/ScienceBack.png"
 HISTORY_BACKGROUND = "images/dungeons/HistoryBack.png"
 ENGLISH_BACKGROUND = "images/dungeons/EnglishBack.png"
@@ -11,6 +10,7 @@ START_BLOCK_IMAGE = "images/dungeons/start_door.png"
 END_BLOCK_IMAGE = "images/dungeons/end_door.png"
 PLAYER_IMAGE = "images/dungeons/player.png"
 
-ENEMYS_IMAGES = ["images/enemys/monster1.png","images/enemys/monster2.png"]
+ENEMY_IMAGE = "images/enemys/monster1.png"
+BOSS_IMAGE = "images/enemys/monster2.png"
 ENEMY_BACKGROUND = "images/enemys/EnemyBackground.png"
 ANSWER_BACKGROUND = "images/enemys/AnswerBackground.png"

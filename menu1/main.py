@@ -12,8 +12,6 @@ from menu_main import *
 from dungeon import Dungeon
 from dungeon_enum import Subject
 
-continue
-
 
 #game variables
 
@@ -113,8 +111,7 @@ def main() -> None:
             
         pygame.display.flip()
         clock.tick(400)
-        
-    #SHITTTTT
+
     pygame.quit()
 
 
